@@ -38,6 +38,20 @@ fruits_to_show = my_fruit_list.loc[fruits_selected]
 streamlit.dataframe(fruits_to_show)
 
 
+
+#function to api call for getting fruit choice
+def get_fruityvice_data(this_fruit_choice):
+    # use api calls
+    fruityvice_response = rq.get("https://fruityvice.com/api/fruit/" + fruit_choice)
+
+    # write your own comment -what does the next line do? 
+    # converses joson to table view
+    fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
+    # write your own comment - display the table veiw
+    return fruityvice_normalized
+
+
+
 #rewrite the fruityvice api response
 streamlit.header('Fruitvice Fruit Advice!')
 
@@ -46,14 +60,9 @@ try:
     if not fruit_choice:
       streamlit.error("Please select a fruit to get information")
     else:
-        # use api calls
-        fruityvice_response = rq.get("https://fruityvice.com/api/fruit/" + fruit_choice)
-        
-        # write your own comment -what does the next line do? 
-        # converses joson to table view
-        fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
-        # write your own comment - display the table veiw
+        back_from _function = get_fruityvice_data(fruit_choice)
         streamlit.dataframe(fruityvice_normalized)
+        
 except URLError as e:
    streamlit.error()
 

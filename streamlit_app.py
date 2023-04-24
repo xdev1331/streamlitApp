@@ -37,23 +37,47 @@ fruits_to_show = my_fruit_list.loc[fruits_selected]
 #only display the selected fruit
 streamlit.dataframe(fruits_to_show)
 
+
+#rewrite the fruityvice api response
+streamlit.header('Fruitvice Fruit Advice!')
+
+try:
+    fruit_choice = streamlit.text_input("What fruit would you like information about?")
+    if not fruit_choice:
+      streamlit.error("Please select a fruit to get information")
+    else:
+        # use api calls
+        fruityvice_response = rq.get("https://fruityvice.com/api/fruit/" + fruit_choice)
+        
+        # write your own comment -what does the next line do? 
+        # converses joson to table view
+        fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
+        # write your own comment - display the table veiw
+        streamlit.dataframe(fruityvice_normalized)
+except URLError as e:
+   streamlit.error()
+
+
+
+
+
 # New Section
-streamlit.header("Fruityvice Fruit Advice!")
+##streamlit.header("Fruityvice Fruit Advice!")
 
 #add user input
-fruit_choice = streamlit.text_input('What fruit would you like information about?','Kiwi')
-streamlit.write('The user entered ', fruit_choice)
+##fruit_choice = streamlit.text_input('What fruit would you like information about?','Kiwi')
+##streamlit.write('The user entered ', fruit_choice)
 
 # use api calls
-fruityvice_response = rq.get("https://fruityvice.com/api/fruit/" + fruit_choice)
+##fruityvice_response = rq.get("https://fruityvice.com/api/fruit/" + fruit_choice)
 # comment out this json display
 #streamlit.text(fruityvice_response.json())
 
 # write your own comment -what does the next line do? 
 # converses joson to table view
-fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
+##fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
 # write your own comment - display the table veiw
-streamlit.dataframe(fruityvice_normalized)
+##streamlit.dataframe(fruityvice_normalized)
 
 streamlit.stop()
 
